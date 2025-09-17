@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
         initRatingSystem();
         animateOnScroll();
         setupServiceCards();
-        setupModal();
         
         // Проверка, если страница уже загружена
         if (document.readyState === 'complete') {
@@ -40,8 +39,6 @@ function initTheme() {
         setTheme(savedTheme);
     } else if (systemPrefersDark) {
         setTheme('dark');
-    } else if (!localStorage.getItem('themeShown')) {
-        setTimeout(showThemeModal, 3000);
     }
 }
 
@@ -70,32 +67,6 @@ function updateThemeIcon() {
 
 // Обработчик для кнопки смены темы
 document.querySelector('.theme-switcher')?.addEventListener('click', toggleTheme);
-
-// ====================== МОДАЛЬНОЕ ОКНО ====================== //
-function setupModal() {
-    const modal = document.getElementById('themeModal');
-    if (!modal) return;
-
-    document.getElementById('closeThemeModal')?.addEventListener('click', () => {
-        modal.classList.remove('active');
-    });
-
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const theme = this.classList.contains('light-btn') ? 'light' : 'dark';
-            setTheme(theme);
-            modal.classList.remove('active');
-            localStorage.setItem('themeShown', 'true');
-        });
-    });
-}
-
-function showThemeModal() {
-    const modal = document.getElementById('themeModal');
-    if (modal) {
-        modal.classList.add('active');
-    }
-}
 
 // ====================== СИСТЕМА ОЦЕНОК ====================== //
 function initRatingSystem() {
@@ -170,20 +141,3 @@ window.addEventListener('scroll', () => {
         animateOnScroll();
     }, 50);
 }, { passive: true });
-
-// ====================== ПРЕЛОАДЕР ====================== //
-window.addEventListener('load', function() {
-    const loader = document.querySelector('.loader');
-    if (loader) {
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-        }, 500);
-    }
-});
-
-// ====================== ЧАТ-КНОПКА ====================== //
-document.querySelector('.chat-button')?.addEventListener('click', function() {
-    // Дополнительные действия при клике на чат
-    console.log('Чат открыт');
-});
