@@ -1,7 +1,7 @@
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     try {
-        initTheme();
+        initThemeModal();
         initRatingSystem();
         animateOnScroll();
         setupServiceCards();
@@ -30,43 +30,38 @@ function hideLoader() {
 // Обработчик полной загрузки страницы
 window.addEventListener('load', hideLoader);
 
-// ====================== ТЕМА ====================== //
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme) {
-        setTheme(savedTheme);
-    } else if (systemPrefersDark) {
-        setTheme('dark');
+// ====================== МОДАЛЬНОЕ ОКНО ТЕМЫ ====================== //
+function initThemeModal() {
+    // Показываем модальное окно при каждой загрузке
+    const modal = document.getElementById('themeModal');
+    if (modal) {
+        modal.classList.add('active');
     }
+    
+    // Обработчики для кнопок выбора темы
+    document.querySelector('.light-btn')?.addEventListener('click', function() {
+        setTheme('light');
+        hideThemeModal();
+    });
+    
+    document.querySelector('.dark-btn')?.addEventListener('click', function() {
+        setTheme('dark');
+        hideThemeModal();
+    });
 }
 
 function setTheme(theme) {
     document.body.classList.remove('light-theme', 'dark-theme');
     document.body.classList.add(theme + '-theme');
     localStorage.setItem('theme', theme);
-    updateThemeIcon();
 }
 
-function toggleTheme() {
-    const isDark = document.body.classList.contains('dark-theme');
-    setTheme(isDark ? 'light' : 'dark');
-}
-
-function updateThemeIcon() {
-    const icon = document.querySelector('.theme-switcher i');
-    if (icon) {
-        if (document.body.classList.contains('dark-theme')) {
-            icon.classList.replace('fa-moon', 'fa-sun');
-        } else {
-            icon.classList.replace('fa-sun', 'fa-moon');
-        }
+function hideThemeModal() {
+    const modal = document.getElementById('themeModal');
+    if (modal) {
+        modal.classList.remove('active');
     }
 }
-
-// Обработчик для кнопки смены темы
-document.querySelector('.theme-switcher')?.addEventListener('click', toggleTheme);
 
 // ====================== СИСТЕМА ОЦЕНОК ====================== //
 function initRatingSystem() {
