@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://helper-177.github.io/sitemap.xml
