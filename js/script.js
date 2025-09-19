@@ -32,7 +32,16 @@ window.addEventListener('load', hideLoader);
 
 // ====================== МОДАЛЬНОЕ ОКНО ТЕМЫ ====================== //
 function initThemeModal() {
-    // Показываем модальное окно при каждой загрузке
+    // Проверяем, есть ли сохраненная тема
+    const savedTheme = localStorage.getItem('theme');
+    
+    // Если тема уже выбрана ранее, применяем ее и не показываем модальное окно
+    if (savedTheme) {
+        setTheme(savedTheme);
+        return; // Выходим из функции, не показывая модальное окно
+    }
+    
+    // Показываем модальное окно только если тема еще не выбрана
     const modal = document.getElementById('themeModal');
     if (modal) {
         modal.classList.add('active');
