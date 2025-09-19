@@ -1,6 +1,7 @@
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     try {
+        // Сначала инициализируем тему (она должна быть первой)
         initThemeModal();
         initRatingSystem();
         animateOnScroll();
@@ -38,15 +39,37 @@ function initThemeModal() {
     // Если тема уже выбрана ранее, применяем ее и не показываем модальное окно
     if (savedTheme) {
         setTheme(savedTheme);
+        // Все равно добавляем обработчики на случай, если пользователь захочет сменить тему через другие элементы
+        setupThemeEventListeners();
         return; // Выходим из функции, не показывая модальное окно
     }
     
     // Показываем модальное окно только если тема еще не выбрана
+    showThemeModal();
+    setupThemeEventListeners();
+}
+
+function setTheme(theme) {
+    document.body.classList.remove('light-theme', 'dark-theme');
+    document.body.classList.add(theme + '-theme');
+    localStorage.setItem('theme', theme);
+}
+
+function showThemeModal() {
     const modal = document.getElementById('themeModal');
     if (modal) {
         modal.classList.add('active');
     }
-    
+}
+
+function hideThemeModal() {
+    const modal = document.getElementById('themeModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+function setupThemeEventListeners() {
     // Обработчики для кнопок выбора темы
     document.querySelector('.light-btn')?.addEventListener('click', function() {
         setTheme('light');
@@ -57,19 +80,13 @@ function initThemeModal() {
         setTheme('dark');
         hideThemeModal();
     });
-}
-
-function setTheme(theme) {
-    document.body.classList.remove('light-theme', 'dark-theme');
-    document.body.classList.add(theme + '-theme');
-    localStorage.setItem('theme', theme);
-}
-
-function hideThemeModal() {
-    const modal = document.getElementById('themeModal');
-    if (modal) {
-        modal.classList.remove('active');
-    }
+    
+    // Также можно добавить обработчик для закрытия по клику вне окна
+    document.getElementById('themeModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideThemeModal();
+        }
+    });
 }
 
 // ====================== СИСТЕМА ОЦЕНОК ====================== //
